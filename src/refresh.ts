@@ -1,7 +1,6 @@
 import { Action, Thing } from "webthing";
 import { v4 as uuidv4 } from "uuid";
 import { graphql } from "@octokit/graphql";
-import { config } from "dotenv";
 import {
   change,
   followers,
@@ -14,7 +13,6 @@ import {
   username,
 } from "./values";
 
-config();
 const hours = Number(process.env.HOURS);
 const UPDATE_INTERVAL = 1000 * 60 * 60 * hours;
 

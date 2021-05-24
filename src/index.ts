@@ -1,6 +1,7 @@
-import { Property, SingleThing, Thing, Value, WebThingServer } from "webthing";
 import { config } from "dotenv";
-import { RefreshAction, updateThing } from "./refresh";
+config();
+
+import { Property, SingleThing, Thing, WebThingServer } from "webthing";
 import {
   change,
   followers,
@@ -12,7 +13,6 @@ import {
   total,
   username,
 } from "./values";
-config();
 
 if (!process.env.HOURS) {
   console.error("HOURS environment variable is missing");
@@ -28,6 +28,25 @@ if (!process.env.USERNAME) {
   console.error("USERNAME environment variable is missing");
   process.exit(1);
 }
+
+if (!process.env.PORT) {
+  console.error("PORT environment variable is missing");
+  process.exit(1);
+}
+
+const PORT = Number(process.env.PORT);
+if (Number.isNaN(PORT)) {
+  console.error("PORT environment variable isn't a number");
+  process.exit(1);
+}
+
+const HOURS = Number(process.env.HOURS);
+if (Number.isNaN(HOURS)) {
+  console.error("HOURS environment variable isn't a number");
+  process.exit(1);
+}
+
+import { RefreshAction, updateThing } from "./refresh";
 
 function makeThing() {
   const thing = new Thing(
@@ -141,7 +160,7 @@ function runServer() {
 
   // If adding more than one thing, use MultipleThings() with a name.
   // In the single thing case, the thing's name will be broadcast.
-  const server = new WebThingServer(new SingleThing(thing), 8888);
+  const server = new WebThingServer(new SingleThing(thing), PORT);
 
   process.on("SIGINT", () => {
     server
